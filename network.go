@@ -53,14 +53,14 @@ func (networkInterfaces NetworkInterfaces) validate(kernelArgs kernelArgs) error
 			return fmt.Errorf("must specify at least one of CNIConfiguration or StaticConfiguration for network interfaces: %+v", networkInterfaces)
 		}
 
-		if hasCNI && hasStaticInterface {
-			// TODO(sipsma) in theory, the current code actually supports the user providing both CNI and StaticConfiguration
-			// for a single interface. The behavior would be that CNI is invoked but the final device used would be
-			// specified statically rather than parsed from the CNI result via vmconf.
-			// This may be useful in some scenarios, but the full implications of enabling it have not yet been considered or
-			// tested, so for now providing both is blocked to prevent any regrettable one-way doors.
-			return fmt.Errorf("cannot provide both CNIConfiguration and StaticConfiguration for a network interface: %+v", iface)
-		}
+		// if hasCNI && hasStaticInterface {
+		// 	// TODO(sipsma) in theory, the current code actually supports the user providing both CNI and StaticConfiguration
+		// 	// for a single interface. The behavior would be that CNI is invoked but the final device used would be
+		// 	// specified statically rather than parsed from the CNI result via vmconf.
+		// 	// This may be useful in some scenarios, but the full implications of enabling it have not yet been considered or
+		// 	// tested, so for now providing both is blocked to prevent any regrettable one-way doors.
+		// 	return fmt.Errorf("cannot provide both CNIConfiguration and StaticConfiguration for a network interface: %+v", iface)
+		// }
 
 		if hasCNI || hasStaticIP {
 			// due to limitations of using "ip=" kernel boot param, currently only one network interface can be provided
