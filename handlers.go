@@ -326,6 +326,7 @@ var loadSnapshotRemoveHandlerList = []Handler{
 	AttachDrivesHandler,
 	CreateNetworkInterfacesHandler,
 	ConfigMmdsHandler,
+	AddVsocksHandler,
 }
 
 var defaultValidationHandlerList = HandlerList{}.Append(
