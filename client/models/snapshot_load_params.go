@@ -19,6 +19,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"strconv"
+
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
@@ -29,6 +31,9 @@ import (
 // SnapshotLoadParams snapshot load params
 // swagger:model SnapshotLoadParams
 type SnapshotLoadParams struct {
+
+	// drive overrides
+	DriveOverrides []*DriveOverride `json:"drive_overrides,omitempty"`
 
 	// Enable support for incremental (diff) snapshots by tracking dirty guest pages.
 	EnableDiffSnapshots bool `json:"enable_diff_snapshots,omitempty"`
@@ -49,6 +54,10 @@ type SnapshotLoadParams struct {
 func (m *SnapshotLoadParams) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateDriveOverrides(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateMemFilePath(formats); err != nil {
 		res = append(res, err)
 	}
@@ -60,6 +69,31 @@ func (m *SnapshotLoadParams) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SnapshotLoadParams) validateDriveOverrides(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.DriveOverrides) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.DriveOverrides); i++ {
+		if swag.IsZero(m.DriveOverrides[i]) { // not required
+			continue
+		}
+
+		if m.DriveOverrides[i] != nil {
+			if err := m.DriveOverrides[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("drive_overrides" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

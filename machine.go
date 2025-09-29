@@ -630,7 +630,7 @@ func (m *Machine) startVMM(ctx context.Context) error {
 	return nil
 }
 
-//StopVMM stops the current VMM.
+// StopVMM stops the current VMM.
 func (m *Machine) StopVMM() error {
 	return m.stopVMM()
 }
@@ -1154,6 +1154,7 @@ func (m *Machine) loadSnapshot(ctx context.Context, snapshot *SnapshotConfig) er
 		SnapshotPath:        &snapshot.SnapshotPath,
 		EnableDiffSnapshots: snapshot.EnableDiffSnapshots,
 		ResumeVM:            snapshot.ResumeVM,
+		DriveOverrides:      snapshot.DriveOverrides,
 	}
 
 	if _, err := m.client.LoadSnapshot(ctx, snapshotParams); err != nil {
